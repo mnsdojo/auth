@@ -1,6 +1,13 @@
 // src/auth/entities/user.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Role } from './role.entity';
 
 @Entity()
 export class User {
@@ -12,7 +19,7 @@ export class User {
 
   @Column()
   @Exclude()
-  password: string;
+  password?: string;
 
   @Column({ nullable: true })
   firstName?: string;
@@ -22,4 +29,14 @@ export class User {
 
   @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
+
+  @Column({ nullable: true })
+  googleId?: string;
+
+  @Column({ nullable: true })
+  avatarUrl?: string;
+
+  @ManyToMany(() => Role)
+  @JoinTable()
+  roles: Role[];
 }
